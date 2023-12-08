@@ -9,18 +9,18 @@ ENV PROJECT_EMAIL="david.abarca@mechaconsulting.org"
 
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 
+# Setup prerequisites
 RUN apk add --update --no-cache \
   openssh=${OPENSSH_VERSION} \
-  py3-mysqlclient=${PY_MYSQLCLIENT_VERSION}
-
-RUN pip3 install --upgrade pip
-
-RUN adduser -D worker
+  py3-mysqlclient=${PY_MYSQLCLIENT_VERSION} \
+  && adduser -D worker
 USER worker
 WORKDIR /home/worker
 
+# Set for ansible
 ENV PATH="/home/worker/.local/bin:${PATH}"
 
+# Setup ansible
 COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir --user -r requirements.txt
 
